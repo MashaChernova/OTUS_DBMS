@@ -2,11 +2,6 @@ import pymysql
 import time
 from datetime import datetime
 
-def my_decoratot(func):
-    try:
-        func()
-    except Exception as e:
-        print(f"Ошибка: {e}")
 
 class DbConnecter():
     def __init__(self, host, port, user, password, database ):
@@ -44,8 +39,7 @@ class DbConnecter():
             'code': "1",
             "date_added": "1900-01-01"
         }
-        for customer_data_key in list(customer_data):
-            full_customer_data[str(customer_data_key)] = str(customer_data.get(customer_data_key))
+        full_customer_data |= customer_data
         try:
             keys = list(full_customer_data)
             keys_str = ', '.join(keys)
@@ -164,13 +158,3 @@ class DbConnecter():
         except Exception as e:
             print(f"Ошибка: {e}")
 
-conn = DbConnecter('192.168.0.164', 3306, 'bn_opencart', '', 'bitnami_opencart')
-conn.create_customer({'email': "111@iu.ff"})
-# conn.check_id_for_attribute('email', "2")
-# # n=2
-# conn.update_customer(n,{'email': '70ii@ii.ii'})
-# # print("номер записи: " + str(n))
-#conn.check_customer_data_for_id(8, '*')
-#print(conn.check_customer_data_for_id(2, ['email']))
-#print(conn.get_id_list())
-#conn.get_all_custimer_data(2)

@@ -1,5 +1,5 @@
 from email.policy import default
-
+from faker import Faker
 import pytest
 import logging
 from lib.db import DbConnecter
@@ -20,3 +20,20 @@ def connection(request):
     password = request.config.getoption('--password')
     connecter = DbConnecter(host, port, user, password, database)
     return connecter
+
+@pytest.fixture
+def fake():
+    return Faker()
+
+@pytest.fixture
+def customer_data(fake):
+    return {
+        'email': fake.email(),
+        'firstname': fake.first_name(),
+        'lastname': fake.last_name(),
+        'telephone': fake.phone_number()
+    }
+
+@pytest.fixture
+def test_customer_id(customer_data, connection):
+     return connection.create_customer(customer_data)
